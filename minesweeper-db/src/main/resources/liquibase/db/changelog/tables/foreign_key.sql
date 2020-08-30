@@ -1,0 +1,1 @@
+alter table game add constraint fk_game_user foreign key (user_id) references user_account (user_id);

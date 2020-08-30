@@ -22,12 +22,16 @@
         <module>minesweeper-client</module>
         <module>minesweeper-common</module>
         <module>minesweeper-service</module>
+        <module>minesweeper-db</module>
     </modules>
 
     <properties>
         <java.version>11</java.version>
         <springdoc-openapi.version>1.4.4</springdoc-openapi.version>
         <guava.version>23.0</guava.version>
+
+        <!-- Testing -->
+        <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
     </properties>
 
     <dependencyManagement>
@@ -46,6 +50,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.ingenio.game</groupId>
+                <artifactId>minesweeper-db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
@@ -56,6 +66,14 @@
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${springdoc-openapi.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.mattbertolini</groupId>
+                <artifactId>liquibase-slf4j</artifactId>
+                <version>${liquibase-slf4j.version}</version>
+                <scope>test</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -68,12 +86,14 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>

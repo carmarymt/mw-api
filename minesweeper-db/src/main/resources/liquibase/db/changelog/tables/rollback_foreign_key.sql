@@ -1,0 +1,1 @@
+alter table game drop constraint fk_game_user;
