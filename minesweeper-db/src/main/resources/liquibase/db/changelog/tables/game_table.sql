@@ -1,6 +1,10 @@
 create table game (
   game_id bigint unsigned not null auto_increment comment 'Unique identifier',
   status_id tinyint default 1 comment 'Game statuses: 1 - In_progress, 2 - Paused, 3 - Game_over, 4 - Finished',
+  num_rows tinyint not null comment 'Number of rows',
+  num_columns tinyint not null comment 'Number of columns',
+  num_mines tinyint not null comment 'Number of mines',
+  mines_left tinyint not null comment 'Number of mines left',
   board text not null comment 'Board of the game',
   date_created timestamp(3) not null comment 'Indicates the date when the game is created in the system',
   last_updated timestamp(3) not null comment 'Indicates the date when the game is updated in the system',

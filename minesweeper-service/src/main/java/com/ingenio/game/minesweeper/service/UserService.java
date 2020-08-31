@@ -4,6 +4,7 @@ import com.ingenio.game.minesweeper.dto.UserInfo;
 import com.ingenio.game.minesweeper.dto.request.UserRequest;
 import com.ingenio.game.minesweeper.entity.UserEntity;
 import com.ingenio.game.minesweeper.exception.UserException;
+import com.ingenio.game.minesweeper.exception.UserNotFoundException;
 import com.ingenio.game.minesweeper.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +31,11 @@ public class UserService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(this::toUserInfo)
-                .switchIfEmpty(Mono.empty())
                 .onErrorResume(error -> {
                     log.error("Unable to access database for userId: {}", userId, error);
-                    return Mono.error(error);
+                    return Mono.error(new UserException(error));
                 })
+                .switchIfEmpty(Mono.error(new UserNotFoundException()))
                 .subscribeOn(DB_USER_SCHEDULER);
     }
 

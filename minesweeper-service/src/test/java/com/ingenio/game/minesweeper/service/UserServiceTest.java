@@ -4,6 +4,7 @@ import com.ingenio.game.minesweeper.dto.UserInfo;
 import com.ingenio.game.minesweeper.dto.request.UserRequest;
 import com.ingenio.game.minesweeper.entity.UserEntity;
 import com.ingenio.game.minesweeper.exception.UserException;
+import com.ingenio.game.minesweeper.exception.UserNotFoundException;
 import com.ingenio.game.minesweeper.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -98,6 +99,7 @@ public class UserServiceTest {
 
         StepVerifier
                 .create(underTest.getUserById(USER_ID))
-                .verifyComplete();
+                .expectError(UserNotFoundException.class)
+                .verify();
     }
 }

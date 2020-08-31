@@ -4,7 +4,6 @@ import com.ingenio.game.minesweeper.entity.converter.InstantToTimestampConverter
 import lombok.*;
 
 import javax.persistence.*;
-
 import java.time.Instant;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -29,6 +28,18 @@ public class GameEntity {
 
     @Column(name = "board", nullable = false)
     private String board;
+
+    @Column(name = "num_rows", nullable = false)
+    private int numberRows;
+
+    @Column(name = "num_columns", nullable = false)
+    private int numberColumns;
+
+    @Column(name = "num_mines", nullable = false)
+    private int numberMines;
+
+    @Column(name = "mines_left", nullable = false)
+    private int minesLeft;
 
     @Column(name = "date_created", nullable = false)
     @Convert(converter = InstantToTimestampConverter.class)
