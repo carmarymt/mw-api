@@ -1,0 +1,9 @@
+INSERT INTO `user_account` (`user_id`,`user_name`,`name`,`surname`,`email`,`date_created`) VALUES (7,'carmarymt','Carmary','Mendez','email@gmail.com','2020-08-30 16:24:35.710');
+INSERT INTO `user_account` (`user_id`,`user_name`,`name`,`surname`,`email`,`date_created`) VALUES (8,'carmarymt','Carmary','Mendez','email@gmail.com','2020-08-30 16:24:36.485');
+INSERT INTO `user_account` (`user_id`,`user_name`,`name`,`surname`,`email`,`date_created`) VALUES (9,'carmarymt','Carmary','Mendez','email@gmail.com','2020-08-30 16:24:37.154');
+INSERT INTO `user_account` (`user_id`,`user_name`,`name`,`surname`,`email`,`date_created`) VALUES (10,'carmarymt','Carmary','Mendez','email@gmail.com','2020-08-30 16:24:37.634');
+INSERT INTO `user_account` (`user_id`,`user_name`,`name`,`surname`,`email`,`date_created`) VALUES (11,'carmarymt','Carmary','Mendez','email@gmail.com','2020-08-30 16:24:37.995');
+INSERT INTO `user_account` (`user_id`,`user_name`,`name`,`surname`,`email`,`date_created`) VALUES (12,'carmarymt','Carmary','Mendez','email@gmail.com','2020-08-30 16:24:38.287');
+INSERT INTO `user_account` (`user_id`,`user_name`,`name`,`surname`,`email`,`date_created`) VALUES (13,'carmarymt','Carmary','Mendez','email@gmail.com','2020-08-30 16:24:38.535');
+INSERT INTO `user_account` (`user_id`,`user_name`,`name`,`surname`,`email`,`date_created`) VALUES (14,'carmarymt','Carmary','Mendez','email@gmail.com','2020-08-30 16:24:38.817');
+INSERT INTO `user_account` (`user_id`,`user_name`,`name`,`surname`,`email`,`date_created`) VALUES (15,'carmarymt','Carmary','Mendez','email@gmail.com','2020-08-30 16:24:39.040');

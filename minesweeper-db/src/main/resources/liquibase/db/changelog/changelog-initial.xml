@@ -15,11 +15,11 @@
         </rollback>
     </changeSet>
 
-    <!--<changeSet id="initial:data" author="minesweeper_user">
+    <changeSet id="initial:data" author="minesweeper_user">
         <sqlFile path="data/load_demo_data.sql" relativeToChangelogFile="true"/>
         <rollback>
             <sqlFile path="data/rollback_demo_data.sql" relativeToChangelogFile="true"/>
         </rollback>
-    </changeSet>-->
+    </changeSet>
 
 </databaseChangeLog>

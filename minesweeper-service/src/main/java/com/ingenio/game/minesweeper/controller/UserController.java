@@ -5,6 +5,7 @@ import com.ingenio.game.minesweeper.dto.UserGameHistory;
 import com.ingenio.game.minesweeper.dto.UserInfo;
 import com.ingenio.game.minesweeper.dto.request.UserRequest;
 import com.ingenio.game.minesweeper.error.ServiceError;
+import com.ingenio.game.minesweeper.service.UserService;
 import com.ingenio.game.minesweeper.utils.TestApiUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -16,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -28,6 +31,8 @@ import java.util.List;
         content = @Content(schema = @Schema(implementation = ServiceError.class)))
 public class UserController {
 
+    private final UserService userService;
+
     @Operation(
             description = "Create users",
             responses = {
@@ -38,9 +43,9 @@ public class UserController {
                     content = @Content(schema = @Schema(implementation = UserRequest.class)))
     )
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public UserInfo createUser(@RequestBody final UserRequest userRequest) {
+    public Mono<UserInfo> createUser(@RequestBody final UserRequest userRequest) {
 
-        return TestApiUtils.createUser(userRequest);
+        return userService.createUser(userRequest);
     }
 
     @Operation(
@@ -52,9 +57,9 @@ public class UserController {
             }
     )
     @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserInfo getUser(@PathVariable("userId") Long userId) {
+    public Mono<UserInfo> getUser(@PathVariable("userId") Long userId) {
 
-        return TestApiUtils.createNewUser(userId);
+        return userService.getUserById(userId);
     }
 
     @Operation(
@@ -63,11 +68,9 @@ public class UserController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserInfo.class))))
     )
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserInfo> getAllUsers() {
+    public Flux<UserInfo> getAllUsers() {
 
-        return Lists.newArrayList(
-                TestApiUtils.createNewUser(1L),
-                TestApiUtils.createNewUser(2L));
+        return userService.getAllUsers();
     }
 
     @Operation(
