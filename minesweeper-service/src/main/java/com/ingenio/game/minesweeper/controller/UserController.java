@@ -8,7 +8,6 @@ import com.ingenio.game.minesweeper.error.ServiceError;
 import com.ingenio.game.minesweeper.service.UserService;
 import com.ingenio.game.minesweeper.utils.TestApiUtils;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -60,17 +56,6 @@ public class UserController {
     public Mono<UserInfo> getUser(@PathVariable("userId") Long userId) {
 
         return userService.getUserById(userId);
-    }
-
-    @Operation(
-            description = "Get all users.",
-            responses = @ApiResponse(responseCode = "200", description = "List of User object.",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserInfo.class))))
-    )
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Flux<UserInfo> getAllUsers() {
-
-        return userService.getAllUsers();
     }
 
     @Operation(

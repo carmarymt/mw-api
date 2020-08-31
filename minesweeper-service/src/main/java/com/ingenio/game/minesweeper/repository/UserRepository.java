@@ -10,7 +10,4 @@ import java.util.stream.Stream;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    @Query("select u from UserEntity u")
-    Stream<UserEntity> streamAll();
-
 }

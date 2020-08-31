@@ -39,23 +39,9 @@ public class UserService {
                 .subscribeOn(DB_USER_SCHEDULER);
     }
 
-
-    public Flux<UserInfo> getAllUsers() {
-
-        log.info("Find all users");
-
-        return Flux.fromStream(() -> userRepository.streamAll())
-                .map(this::toUserInfo)
-                .onErrorResume(error -> {
-                    log.error("Unable to access database", error);
-                    return Mono.error(error);
-                })
-                .subscribeOn(DB_USER_SCHEDULER);
-    }
-
     public Mono<UserInfo> createUser(UserRequest userRequest) {
 
-        log.info("Save or Update user request: {}", userRequest);
+        log.info("Save a user request: {}", userRequest);
 
         return Mono.fromCallable(() -> userRepository.saveAndFlush(toUserEntity(userRequest)))
                 .map(this::toUserInfo)

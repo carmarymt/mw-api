@@ -1,8 +1,6 @@
 package com.ingenio.game.minesweeper.utils;
 
 import com.ingenio.game.minesweeper.dto.GameInfo;
-import com.ingenio.game.minesweeper.dto.UserInfo;
-import com.ingenio.game.minesweeper.dto.request.UserRequest;
 import lombok.experimental.UtilityClass;
 
 import java.time.Instant;
