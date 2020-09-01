@@ -1,9 +1,11 @@
 package com.ingenio.game.minesweeper.controller;
 
-import com.ingenio.game.minesweeper.dto.GameInfo;
-import com.ingenio.game.minesweeper.dto.request.GameRequest;
-import com.ingenio.game.minesweeper.dto.request.UserMoveRequest;
-import com.ingenio.game.minesweeper.utils.TestApiUtils;
+import com.ingenio.game.minesweeper.constants.GameActionEnum;
+import com.ingenio.game.minesweeper.domain.GameInfo;
+import com.ingenio.game.minesweeper.domain.dto.MessageAction;
+import com.ingenio.game.minesweeper.domain.request.GameRequest;
+import com.ingenio.game.minesweeper.domain.request.UserMoveRequest;
+import com.ingenio.game.minesweeper.service.MinesweeperService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Minesweeper Game API", description = "Minesweeper Game endpoints")
 @RequestMapping("/minesweeper/game")
 public class GameController {
+
+    private final MinesweeperService minesweeperService;
 
     @Operation(
             description = "Start a new game according parameters provided: number of rows, columns, and mines",
@@ -33,10 +38,14 @@ public class GameController {
     )
     @PostMapping(value = "/start",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public GameInfo createGame(@RequestParam("userId") Long userId,
-                               @RequestBody final GameRequest user) {
+    public Mono<GameInfo> createGame(@RequestParam("userId") Long userId,
+                                     @RequestBody final GameRequest gameRequest) {
 
-        return TestApiUtils.gameStarted();
+        return minesweeperService.process(MessageAction.builder()
+                .id(userId)
+                .gameAction(GameActionEnum.START)
+                .gameRequest(gameRequest)
+                .build());
     }
 
     @Operation(
@@ -48,9 +57,12 @@ public class GameController {
             }
     )
     @GetMapping(value = "/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public GameInfo getGame(@PathVariable("gameId") String gameId) {
+    public Mono<GameInfo> getGame(@PathVariable("gameId") Long gameId) {
 
-        return TestApiUtils.gameUpdated("IN_PROGRESS");
+        return minesweeperService.process(MessageAction.builder()
+                .id(gameId)
+                .gameAction(GameActionEnum.STATUS)
+                .build());
     }
 
     @Operation(
@@ -65,10 +77,14 @@ public class GameController {
     )
     @PostMapping(value = "/{gameId}/move",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public GameInfo triggerUserMove(@PathVariable("gameId") String gameId,
-                                    @RequestBody final UserMoveRequest user) {
+    public Mono<GameInfo> triggerUserMove(@PathVariable("gameId") Long gameId,
+                                          @RequestBody final UserMoveRequest userMoveRequest) {
 
-        return TestApiUtils.gameUpdated("GAME_OVER");
+        return minesweeperService.process(MessageAction.builder()
+                .id(gameId)
+                .gameAction(GameActionEnum.PLAY)
+                .userMoveRequest(userMoveRequest)
+                .build());
     }
 
     @Operation(
@@ -80,9 +96,12 @@ public class GameController {
             }
     )
     @PostMapping(value = "/{gameId}/pause", produces = MediaType.APPLICATION_JSON_VALUE)
-    public GameInfo pauseGame(@PathVariable("gameId") String gameId) {
+    public Mono<GameInfo> pauseGame(@PathVariable("gameId") Long gameId) {
 
-        return TestApiUtils.gameUpdated("PAUSE");
+        return minesweeperService.process(MessageAction.builder()
+                .id(gameId)
+                .gameAction(GameActionEnum.PAUSE)
+                .build());
     }
 
     @Operation(
@@ -94,9 +113,12 @@ public class GameController {
             }
     )
     @PostMapping(value = "/{gameId}/resume", produces = MediaType.APPLICATION_JSON_VALUE)
-    public GameInfo resumeGame(@PathVariable("gameId") String gameId) {
+    public Mono<GameInfo> resumeGame(@PathVariable("gameId") Long gameId) {
 
-        return TestApiUtils.gameUpdated("IN_PROGRESS");
+        return minesweeperService.process(MessageAction.builder()
+                .id(gameId)
+                .gameAction(GameActionEnum.RESUME)
+                .build());
     }
 
 }

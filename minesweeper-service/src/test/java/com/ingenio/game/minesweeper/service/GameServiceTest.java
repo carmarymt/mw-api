@@ -30,7 +30,7 @@ public class GameServiceTest {
             .board("[[BOARD]]")
             .dateCreated(INSTANT_DATE)
             .lastUpdated(INSTANT_DATE)
-            .timeDurationSeconds(300)
+            .timeDurationSeconds(300L)
             .build();
 
     @Mock

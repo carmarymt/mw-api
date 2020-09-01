@@ -1,7 +1,7 @@
 package com.ingenio.game.minesweeper.service;
 
-import com.ingenio.game.minesweeper.dto.UserInfo;
-import com.ingenio.game.minesweeper.dto.request.UserRequest;
+import com.ingenio.game.minesweeper.domain.UserInfo;
+import com.ingenio.game.minesweeper.domain.request.UserRequest;
 import com.ingenio.game.minesweeper.entity.UserEntity;
 import com.ingenio.game.minesweeper.exception.UserException;
 import com.ingenio.game.minesweeper.exception.UserNotFoundException;
@@ -64,8 +64,7 @@ public class UserServiceTest {
 
         when(userRepository.saveAndFlush(any())).thenReturn(USER_ENTITY);
 
-        StepVerifier
-                .create(underTest.createUser(USER_REQUEST))
+        StepVerifier.create(underTest.createUser(USER_REQUEST))
                 .expectNext(USER_INFO)
                 .verifyComplete();
     }
@@ -75,8 +74,7 @@ public class UserServiceTest {
 
         when(userRepository.saveAndFlush(any())).thenReturn(new Exception());
 
-        StepVerifier
-                .create(underTest.createUser(USER_REQUEST))
+        StepVerifier.create(underTest.createUser(USER_REQUEST))
                 .expectError(UserException.class)
                 .verify();
     }
@@ -86,9 +84,8 @@ public class UserServiceTest {
 
         when(userRepository.findById(USER_ID)).thenReturn(Optional.of(USER_ENTITY));
 
-        StepVerifier
-                .create(underTest.getUserById(USER_ID))
-                .expectNext(USER_INFO)
+        StepVerifier.create(underTest.getUserById(USER_ID))
+                .expectNext(USER_ENTITY)
                 .verifyComplete();
     }
 
@@ -97,8 +94,7 @@ public class UserServiceTest {
 
         when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
 
-        StepVerifier
-                .create(underTest.getUserById(USER_ID))
+        StepVerifier.create(underTest.getUserById(USER_ID))
                 .expectError(UserNotFoundException.class)
                 .verify();
     }

@@ -1,4 +1,4 @@
-package com.ingenio.game.minesweeper.dto;
+package com.ingenio.game.minesweeper.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,7 +11,7 @@ import lombok.Value;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class GameInfo {
 
-    String gameId;
+    Long gameId;
 
     String status;
 

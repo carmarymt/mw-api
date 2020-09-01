@@ -1,6 +1,6 @@
 package com.ingenio.game.minesweeper.utils;
 
-import com.ingenio.game.minesweeper.dto.GameInfo;
+import com.ingenio.game.minesweeper.domain.GameInfo;
 import lombok.experimental.UtilityClass;
 
 import java.time.Instant;
@@ -8,7 +8,8 @@ import java.time.Instant;
 @UtilityClass
 public class TestApiUtils {
 
-    String[][] BOARD = {{"X", "X", "X"}, {"X", "M", "X"}, {"X", "X", "X"}};
+    public String[][] BOARD = {{"X", "X", "X"}, {"X", "M", "X"}, {"X", "X", "X"}};
+    public String[][] BOARD_MOVE = {{"C", "C", "C"}, {"M", "M", "M"}, {"C", "C", "C"}};
 
     public GameInfo createGameHistory() {
 
@@ -19,26 +20,4 @@ public class TestApiUtils {
                 .build();
     }
 
-    public GameInfo gameStarted() {
-
-        return GameInfo.builder()
-                .gameId("asd123")
-                .status("IN_PROGRESS")
-                .board(BOARD)
-                .dateCreated(Instant.now().getEpochSecond())
-                .lastUpdated(Instant.now().getEpochSecond())
-                .timeDurationSeconds(300L)
-                .build();
-    }
-
-    public GameInfo gameUpdated(String status) {
-
-        return GameInfo.builder()
-                .status(status)
-                .board(BOARD)
-                .dateCreated(Instant.now().getEpochSecond())
-                .lastUpdated(Instant.now().getEpochSecond())
-                .timeDurationSeconds(360L)
-                .build();
-    }
 }

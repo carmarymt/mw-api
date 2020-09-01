@@ -1,7 +1,7 @@
 package com.ingenio.game.minesweeper.service;
 
-import com.ingenio.game.minesweeper.dto.UserInfo;
-import com.ingenio.game.minesweeper.dto.request.UserRequest;
+import com.ingenio.game.minesweeper.domain.UserInfo;
+import com.ingenio.game.minesweeper.domain.request.UserRequest;
 import com.ingenio.game.minesweeper.entity.UserEntity;
 import com.ingenio.game.minesweeper.exception.UserException;
 import com.ingenio.game.minesweeper.exception.UserNotFoundException;
@@ -23,14 +23,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Mono<UserInfo> getUserById(Long userId) {
+    public Mono<UserEntity> getUserById(Long userId) {
 
         log.info("Find user for userId {}:", userId);
 
         return Mono.fromCallable(() -> userRepository.findById(userId))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(this::toUserInfo)
                 .onErrorResume(error -> {
                     log.error("Unable to access database for userId: {}", userId, error);
                     return Mono.error(new UserException(error));
@@ -53,7 +52,7 @@ public class UserService {
                 .subscribeOn(DB_USER_SCHEDULER);
     }
 
-    private UserInfo toUserInfo(UserEntity userEntity) {
+    public UserInfo toUserInfo(UserEntity userEntity) {
 
         return UserInfo.builder()
                 .userId(userEntity.getUserId())

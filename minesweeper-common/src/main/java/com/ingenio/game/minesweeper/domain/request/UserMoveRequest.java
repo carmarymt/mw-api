@@ -1,4 +1,4 @@
-package com.ingenio.game.minesweeper.dto.request;
+package com.ingenio.game.minesweeper.domain.request;
 
 import lombok.Builder;
 import lombok.NonNull;

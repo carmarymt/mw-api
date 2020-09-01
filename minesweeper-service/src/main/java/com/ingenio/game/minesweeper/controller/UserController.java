@@ -1,9 +1,9 @@
 package com.ingenio.game.minesweeper.controller;
 
 import com.google.common.collect.Lists;
-import com.ingenio.game.minesweeper.dto.UserGameHistory;
-import com.ingenio.game.minesweeper.dto.UserInfo;
-import com.ingenio.game.minesweeper.dto.request.UserRequest;
+import com.ingenio.game.minesweeper.domain.UserGameHistory;
+import com.ingenio.game.minesweeper.domain.UserInfo;
+import com.ingenio.game.minesweeper.domain.request.UserRequest;
 import com.ingenio.game.minesweeper.error.ServiceError;
 import com.ingenio.game.minesweeper.service.UserService;
 import com.ingenio.game.minesweeper.utils.TestApiUtils;
@@ -55,7 +55,8 @@ public class UserController {
     @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<UserInfo> getUser(@PathVariable("userId") Long userId) {
 
-        return userService.getUserById(userId);
+        return userService.getUserById(userId)
+                .map(userService::toUserInfo);
     }
 
     @Operation(

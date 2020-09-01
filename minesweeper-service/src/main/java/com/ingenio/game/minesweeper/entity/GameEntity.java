@@ -24,7 +24,7 @@ public class GameEntity {
     private Long gameId;
 
     @Column(name = "status_id", nullable = false)
-    private int status;
+    private Integer status;
 
     @Column(name = "board", nullable = false)
     private String board;
@@ -39,7 +39,7 @@ public class GameEntity {
     private int numberMines;
 
     @Column(name = "mines_left", nullable = false)
-    private int minesLeft;
+    private Integer minesLeft;
 
     @Column(name = "date_created", nullable = false)
     @Convert(converter = InstantToTimestampConverter.class)
@@ -50,7 +50,7 @@ public class GameEntity {
     private Instant lastUpdated;
 
     @Column(name = "time_duration_sec", nullable = false)
-    private int timeDurationSeconds;
+    private Long timeDurationSeconds;
 
     @JoinColumn(name = "user_id")
     @ManyToOne(optional = false)
