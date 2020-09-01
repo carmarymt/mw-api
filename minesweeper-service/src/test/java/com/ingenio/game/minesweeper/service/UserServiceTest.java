@@ -1,17 +1,21 @@
 package com.ingenio.game.minesweeper.service;
 
+import com.ingenio.game.minesweeper.domain.UserGameHistory;
 import com.ingenio.game.minesweeper.domain.UserInfo;
 import com.ingenio.game.minesweeper.domain.request.UserRequest;
 import com.ingenio.game.minesweeper.entity.UserEntity;
 import com.ingenio.game.minesweeper.exception.UserException;
 import com.ingenio.game.minesweeper.exception.UserNotFoundException;
 import com.ingenio.game.minesweeper.repository.UserRepository;
+import com.ingenio.game.minesweeper.utils.ConverterUtils;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import java.time.Instant;
@@ -51,6 +55,9 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private GameService gameService;
+
     @InjectMocks
     private UserService underTest;
 
@@ -70,7 +77,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testCreateUSerFailureDatabaseUnreachable() {
+    public void testCreateUserFailureDatabaseUnreachable() {
 
         when(userRepository.saveAndFlush(any())).thenReturn(new Exception());
 
@@ -90,12 +97,29 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserByIdEmptySuccess() {
+    public void testGetUserByIdEmptyThrowUserNotFoundException() {
 
         when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
 
         StepVerifier.create(underTest.getUserById(USER_ID))
                 .expectError(UserNotFoundException.class)
                 .verify();
+    }
+
+    @Test
+    public void testGetAllGameByUserSuccess() {
+
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(USER_ENTITY));
+
+        when(gameService.getAllGameByUser(USER_ENTITY)).thenReturn(Flux.just(GameServiceTest.GAME_ENTITY));
+
+        var gameInfoExpected = ConverterUtils.toGameHistoryInfo(GameServiceTest.GAME_ENTITY);
+        
+        var userGameHistoryExpected = UserGameHistory.builder()
+                .games(Lists.list(gameInfoExpected)).build();
+
+        StepVerifier.create(underTest.getUserGameHistory(USER_ID))
+                .expectNext(userGameHistoryExpected)
+                .verifyComplete();
     }
 }

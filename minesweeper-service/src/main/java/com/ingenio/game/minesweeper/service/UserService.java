@@ -1,11 +1,13 @@
 package com.ingenio.game.minesweeper.service;
 
+import com.ingenio.game.minesweeper.domain.UserGameHistory;
 import com.ingenio.game.minesweeper.domain.UserInfo;
 import com.ingenio.game.minesweeper.domain.request.UserRequest;
 import com.ingenio.game.minesweeper.entity.UserEntity;
 import com.ingenio.game.minesweeper.exception.UserException;
 import com.ingenio.game.minesweeper.exception.UserNotFoundException;
 import com.ingenio.game.minesweeper.repository.UserRepository;
+import com.ingenio.game.minesweeper.utils.ConverterUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ import static com.ingenio.game.minesweeper.executor.SchedulerProvider.DB_USER_SC
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final GameService gameService;
 
     public Mono<UserEntity> getUserById(Long userId) {
 
@@ -50,6 +54,17 @@ public class UserService {
                     return Mono.error(new UserException(error));
                 })
                 .subscribeOn(DB_USER_SCHEDULER);
+    }
+
+    public Mono<UserGameHistory> getUserGameHistory(Long userId) {
+
+        log.info("Find user game history for userId {}:", userId);
+
+        return getUserById(userId)
+                .flatMapMany(gameService::getAllGameByUser)
+                .map(ConverterUtils::toGameHistoryInfo)
+                .collectList()
+                .map(gameHistory -> UserGameHistory.builder().games(gameHistory).build());
     }
 
     public UserInfo toUserInfo(UserEntity userEntity) {

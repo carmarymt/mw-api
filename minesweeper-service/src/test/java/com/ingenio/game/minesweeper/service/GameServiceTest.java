@@ -4,6 +4,7 @@ import com.ingenio.game.minesweeper.entity.GameEntity;
 import com.ingenio.game.minesweeper.exception.GameException;
 import com.ingenio.game.minesweeper.exception.GameNotFoundException;
 import com.ingenio.game.minesweeper.repository.GameRepository;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +46,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void testCreateUserSuccess() {
+    public void testCreateGameSuccess() {
 
         when(gameRepository.saveAndFlush(any())).thenReturn(GAME_ENTITY);
 
@@ -55,7 +56,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void testCreateUSerFailureDatabaseUnreachable() {
+    public void testSaveGameFailureDatabaseUnreachable() {
 
         when(gameRepository.saveAndFlush(any())).thenReturn(new Exception());
 
@@ -65,7 +66,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void testGetUserByIdSuccess() {
+    public void testGetGameByIdSuccess() {
 
         when(gameRepository.findById(GAME_ID)).thenReturn(Optional.of(GAME_ENTITY));
 
@@ -75,7 +76,7 @@ public class GameServiceTest {
     }
 
     @Test
-    public void testGetUserByIdEmptySuccess() {
+    public void testGetGameByIdEmptyThrowGameNotFoundException() {
 
         when(gameRepository.findById(GAME_ID)).thenReturn(Optional.empty());
 
@@ -83,5 +84,16 @@ public class GameServiceTest {
                 .expectError(GameNotFoundException.class)
                 .verify();
     }
+
+    @Test
+    public void testAllGameByIdSuccess() {
+
+        when(gameRepository.findGamesByUser(UserServiceTest.USER_ENTITY)).thenReturn(Lists.newArrayList(GAME_ENTITY));
+
+        StepVerifier.create(underTest.getAllGameByUser(UserServiceTest.USER_ENTITY))
+                .expectNext(GAME_ENTITY)
+                .verifyComplete();
+    }
+
 
 }

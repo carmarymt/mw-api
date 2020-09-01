@@ -32,4 +32,13 @@ public class ConverterUtils {
                 .build();
     }
 
+    public GameInfo toGameHistoryInfo(final GameEntity gameEntity) {
+
+        return GameInfo.builder()
+                .gameId(gameEntity.getGameId())
+                .status(GameStatusEnum.get(gameEntity.getStatus()).getStatusName())
+                .lastUpdated(gameEntity.getLastUpdated().getEpochSecond())
+                .timeDurationSeconds(gameEntity.getTimeDurationSeconds())
+                .build();
+    }
 }

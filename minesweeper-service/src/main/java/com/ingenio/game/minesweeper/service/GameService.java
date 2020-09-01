@@ -1,12 +1,14 @@
 package com.ingenio.game.minesweeper.service;
 
 import com.ingenio.game.minesweeper.entity.GameEntity;
+import com.ingenio.game.minesweeper.entity.UserEntity;
 import com.ingenio.game.minesweeper.exception.GameException;
 import com.ingenio.game.minesweeper.exception.GameNotFoundException;
 import com.ingenio.game.minesweeper.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
@@ -48,4 +50,15 @@ public class GameService {
                 .subscribeOn(DB_USER_SCHEDULER);
     }
 
+    public Flux<GameEntity> getAllGameByUser(UserEntity userEntity) {
+
+        log.info("Find all game user {}:", userEntity);
+
+        return Flux.fromStream(() -> gameRepository.findGamesByUser(userEntity).stream())
+                .onErrorResume(error -> {
+                    log.error("Unable to access database for user: {}", userEntity, error);
+                    return Mono.error(new GameException(error));
+                })
+                .subscribeOn(DB_USER_SCHEDULER);
+    }
 }

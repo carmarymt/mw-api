@@ -1,12 +1,10 @@
 package com.ingenio.game.minesweeper.controller;
 
-import com.google.common.collect.Lists;
 import com.ingenio.game.minesweeper.domain.UserGameHistory;
 import com.ingenio.game.minesweeper.domain.UserInfo;
 import com.ingenio.game.minesweeper.domain.request.UserRequest;
 import com.ingenio.game.minesweeper.error.ServiceError;
 import com.ingenio.game.minesweeper.service.UserService;
-import com.ingenio.game.minesweeper.utils.TestApiUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -68,10 +66,8 @@ public class UserController {
             }
     )
     @GetMapping(value = "/{userId}/history", produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserGameHistory getUserGameHistory(@PathVariable("userId") Long userId) {
+    public Mono<UserGameHistory> getUserGameHistory(@PathVariable("userId") Long userId) {
 
-        return UserGameHistory.builder()
-                .games(Lists.newArrayList(TestApiUtils.createGameHistory()))
-                .build();
+        return userService.getUserGameHistory(userId);
     }
 }
