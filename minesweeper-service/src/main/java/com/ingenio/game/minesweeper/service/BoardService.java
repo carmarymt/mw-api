@@ -25,7 +25,9 @@ public class BoardService implements BoardOperation {
     @Override
     public GameBoard init(final GameRequest game) {
 
-        int nRows = game.getNumberRows(), nColumns = game.getNumberColumns(), nMines = game.getNumberMines();
+        var nRows = game.getNumberRows();
+        var nColumns = game.getNumberColumns();
+        var nMines = game.getNumberMines();
 
         if (nRows == 0 || nColumns == 0 || game.getNumberMines() > (nRows * nColumns))
             throw new BoardOperationException();
@@ -35,7 +37,7 @@ public class BoardService implements BoardOperation {
                 .numberRows(nRows)
                 .numberColumns(nColumns)
                 .board(boardInitialization(nRows, nColumns))
-                .originalBoard(originalBoardInitialization(nMines, nRows, nColumns))
+                .originalBoard(originalBoardInitialization(nRows, nColumns, nMines))
                 .build();
     }
 
