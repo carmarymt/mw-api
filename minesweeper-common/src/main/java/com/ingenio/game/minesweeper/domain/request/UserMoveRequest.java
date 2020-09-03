@@ -14,6 +14,6 @@ public class UserMoveRequest {
     @NonNull
     int column;
 
-    @Builder.Default
-    boolean isFlag = false;
+    @NonNull
+    boolean isFlag;
 }

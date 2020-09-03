@@ -29,6 +29,9 @@ public class GameEntity {
     @Column(name = "board", nullable = false)
     private String board;
 
+    @Column(name = "original_board", nullable = false)
+    private String originalBoard;
+
     @Column(name = "num_rows", nullable = false)
     private int numberRows;
 
@@ -37,9 +40,6 @@ public class GameEntity {
 
     @Column(name = "num_mines", nullable = false)
     private int numberMines;
-
-    @Column(name = "mines_left", nullable = false)
-    private Integer minesLeft;
 
     @Column(name = "date_created", nullable = false)
     @Convert(converter = InstantToTimestampConverter.class)

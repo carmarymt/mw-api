@@ -19,7 +19,7 @@ public class MinesweeperService {
 
         log.info("Running minesweeper service with message: {}", message);
 
-        return gameActionProvider.getGameAction(message.getGameAction())
-                .run(message);
+        return Mono.fromCallable(() -> gameActionProvider.getGameAction(message.getGameAction()))
+                .flatMap(gameAction -> gameAction.run(message));
     }
 }

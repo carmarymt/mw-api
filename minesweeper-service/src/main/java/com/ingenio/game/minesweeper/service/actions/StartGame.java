@@ -7,7 +7,7 @@ import com.ingenio.game.minesweeper.domain.GameInfo;
 import com.ingenio.game.minesweeper.domain.dto.MessageAction;
 import com.ingenio.game.minesweeper.entity.GameEntity;
 import com.ingenio.game.minesweeper.entity.UserEntity;
-import com.ingenio.game.minesweeper.exception.GameException;
+import com.ingenio.game.minesweeper.exception.GameActionException;
 import com.ingenio.game.minesweeper.service.BoardOperation;
 import com.ingenio.game.minesweeper.service.GameService;
 import com.ingenio.game.minesweeper.service.UserService;
@@ -40,7 +40,9 @@ public class StartGame implements GameAction {
     public Mono<GameInfo> run(MessageAction message) {
 
         return userService.getUserById(message.getId())
-                .flatMap(userEntity -> startGame(message, userEntity));
+                .filter(gameEntity -> message.getGameRequest() != null)
+                .flatMap(userEntity -> startGame(message, userEntity))
+                .switchIfEmpty(Mono.error(new GameActionException()));
     }
 
     private Mono<GameInfo> startGame(final MessageAction message, final UserEntity userEntity) {
@@ -51,7 +53,7 @@ public class StartGame implements GameAction {
                 .map(entity -> ConverterUtils.toGameInfo(entity))
                 .onErrorResume(error -> {
                     log.error("Unable to start a game for message: {}", message, error);
-                    return Mono.error(new GameException(error));
+                    return Mono.error(new GameActionException());
                 });
     }
 
@@ -63,27 +65,15 @@ public class StartGame implements GameAction {
 
         return GameEntity.builder()
                 .status(GameStatusEnum.IN_PROGRESS.getId())
-                .board(JsonUtils.convertToString(gameBoard.getField()))
+                .board(JsonUtils.convertToString(gameBoard.getBoard()))
+                .originalBoard(JsonUtils.convertToString(gameBoard.getOriginalBoard()))
                 .numberRows(messageAction.getGameRequest().getNumberRows())
                 .numberColumns(messageAction.getGameRequest().getNumberColumns())
                 .numberMines(messageAction.getGameRequest().getNumberMines())
-                .minesLeft(messageAction.getGameRequest().getNumberMines())
                 .dateCreated(created)
                 .lastUpdated(created)
                 .timeDurationSeconds(0L)
                 .user(userEntity)
-                .build();
-    }
-
-    private GameInfo toGameInfo(final GameEntity gameEntity) {
-
-        return GameInfo.builder()
-                .gameId(gameEntity.getGameId())
-                .status(GameStatusEnum.get(gameEntity.getStatus()).getStatusName())
-                .board(JsonUtils.convert(gameEntity.getBoard(), String[][].class))
-                .dateCreated(gameEntity.getDateCreated().getEpochSecond())
-                .lastUpdated(gameEntity.getLastUpdated().getEpochSecond())
-                .timeDurationSeconds(gameEntity.getTimeDurationSeconds())
                 .build();
     }
 }

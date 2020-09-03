@@ -1,15 +1,20 @@
 package com.ingenio.game.minesweeper.domain;
 
+import com.ingenio.game.minesweeper.constants.GameStatusEnum;
 import lombok.Builder;
 import lombok.Value;
 
 @Value
-@Builder
+@Builder()
 public class GameBoard {
 
-    String[][] field;
+    GameStatusEnum status;
 
-    Integer status;
+    int numberRows;
 
-    Integer minesLeft;
+    int numberColumns;
+
+    String[][] board;
+
+    int[][] originalBoard;
 }
