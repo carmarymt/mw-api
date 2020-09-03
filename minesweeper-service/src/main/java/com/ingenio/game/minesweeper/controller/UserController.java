@@ -37,7 +37,7 @@ public class UserController {
                     content = @Content(schema = @Schema(implementation = UserRequest.class)))
     )
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<UserInfo> createUser(@RequestBody final UserRequest userRequest) {
+    public Mono<UserInfo> createUser(@RequestBody UserRequest userRequest) {
 
         return userService.createUser(userRequest);
     }

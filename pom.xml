@@ -30,7 +30,7 @@
         <springdoc-openapi.version>1.4.4</springdoc-openapi.version>
         <guava.version>23.0</guava.version>
 
-        <spring-data-r2dbc.version>1.1.3.RELEASE</spring-data-r2dbc.version>
+        <spring-cloud-openfeign.version>2.2.5.RELEASE</spring-cloud-openfeign.version>
         <!-- Testing -->
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <io-projectreactor.version>3.3.9.RELEASE</io-projectreactor.version>
@@ -76,17 +76,16 @@
                 <scope>test</scope>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-r2dbc -->
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-r2dbc</artifactId>
-                <version>${spring-data-r2dbc.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-core</artifactId>
                 <version>${io-projectreactor.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${spring-cloud-openfeign.version}</version>
             </dependency>
 
             <!-- Database :: start -->
