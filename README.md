@@ -1,0 +1,2 @@
+# mw-api
+Minesweeper API
