@@ -20,7 +20,7 @@ The following repository contains the API of classic game Minesweeper:
 - Behavioral patterns (Observer, Strategy)
 - Architectural (MVC, DAO, DTO)
 
-####CLI Library
+#### CLI Library
 - Spring Cloud OpenFeign (declarative web client)
 
 #### Search Algorithm
